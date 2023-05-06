@@ -14,7 +14,11 @@ fetch(`http://localhost:3000/api/products`).then(res => res.json()).then(data =>
 })
 console.log(data)
 
-
+//let's try this event listener thing again//
+document.getElementsByClassName("item__content__addButton").addEventListener("click", myFunction, mySecondFunction, myThirdFunction);
+function myFunction () {
+    alert ("Added to cart");
+}
 
 //below is the item configuration for the cart products..
 
