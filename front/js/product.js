@@ -1,4 +1,6 @@
 const cart = JSON.parse (localStorage.getItem ("cart") || "[]")
+const container = document.getElementById ('items');
+cart.forEach ();
 
 const productId = (new URLSearchParams(window.location.search)).get("id"); //getting the product ID from console.log//
 console.log (productId)
