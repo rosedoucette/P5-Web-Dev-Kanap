@@ -23,3 +23,12 @@ cart.forEach(product => {
             </div>
         </article>`;
 });
+
+var orderButton = document.getElementById('order')
+orderButton.addEventListener('click', function (event) {
+    const button = document.getElementById('order')
+    if ('click') {
+        alert("Your order has been submitted!")
+        return
+    }
+})
