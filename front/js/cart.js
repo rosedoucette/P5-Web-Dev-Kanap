@@ -33,3 +33,19 @@ orderButton.addEventListener('click', function (event) {
         return
     }
 })
+
+//maybe don't use this one:
+var totalItems = document.getElementById('totalQuantity')
+totalItems.addEventListener('refresh', function (event) {
+    if ('refresh') {
+        
+    }
+})
+//
+
+var cartTotal = document.getElementById('cart__price').onchange = function () {myFunction()};
+
+function myFunction () {
+    var x = document.getElementById("cart__price");
+    x.value = x.value.totalItems();
+}
