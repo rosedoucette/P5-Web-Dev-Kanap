@@ -1,7 +1,7 @@
 const cart = JSON.parse(localStorage.getItem("cart") || "[]")
 const container = document.getElementById(`cart__items`)
 cart.forEach(product => {
-    const productel = `<article class="cart__item" data-id="${product._id}" data-color="${product.colors}">
+    const productel = `<article class="cart__item" data-id="${product._id}" data-color="${product.color}">
             <div class="cart__item__img">
                 <img src="${product.imageUrl}" alt="${product.altTxt}">
             </div>
@@ -34,25 +34,25 @@ orderButton.addEventListener('click', function (event) {
     }
 })
 
-//maybe don't use this one:
-var totalItems = document.getElementById('totalQuantity')
-totalItems.addEventListener('refresh', function (event) {
-    if ('refresh') {
 
-    }
-})
-//
+var itemQuantity = document.getElementsByClassName('itemQuantity')
+for (let i = 0; i < itemQuantity.length; i += 1) {
+    itemQuantity[i].addEventListener('change', myFunction);
+}
+var cartTotal = Array.from(document.getElementsByClassName('cart__price')) 
+cartTotal.forEach (function (total){ total.addEventListener('change', myFunction)});
 
-var cartTotal = document.getElementById('cart__price').onchange = function () { myFunction() };
+function myFunction(e) {
+    const {target} = e 
+    console.log (target.value)
+    var parent = target.closest('article.cart__item')
+    const {id, color} = parent.dataset
+    console.log (id, color);
 
-function myFunction() {
-    var x = document.getElementById("cart__price");
-    x.value = x.value.totalItems();
 }
 
 //copied from product.js, may not be fully applicable...unless change quantity to price?:
-const productQuantity = Number(document.getElementById('quantity').value) //Numbers clarifies that we are changing this info to a number//
-if (!productQuantity || Number.isNaN(productQuantity)) {
-    alert("Please add a quantity")
-    return
-}
+//const productQuantity = Number(document.getElementById('quantity').value)
+// if (!productQuantity || Number.isNaN(productQuantity)) {
+//     alert("Please add a quantity")
+// }
