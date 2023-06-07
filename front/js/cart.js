@@ -22,7 +22,7 @@ cart.forEach(product => {
                 </div>
             </div>
         </article>`;
-        container.innerHTML += productel
+    container.innerHTML += productel
 });
 
 var orderButton = document.getElementById('order')
@@ -38,14 +38,21 @@ orderButton.addEventListener('click', function (event) {
 var totalItems = document.getElementById('totalQuantity')
 totalItems.addEventListener('refresh', function (event) {
     if ('refresh') {
-        
+
     }
 })
 //
 
-var cartTotal = document.getElementById('cart__price').onchange = function () {myFunction()};
+var cartTotal = document.getElementById('cart__price').onchange = function () { myFunction() };
 
-function myFunction () {
+function myFunction() {
     var x = document.getElementById("cart__price");
     x.value = x.value.totalItems();
+}
+
+//copied from product.js, may not be fully applicable...unless change quantity to price?:
+const productQuantity = Number(document.getElementById('quantity').value) //Numbers clarifies that we are changing this info to a number//
+if (!productQuantity || Number.isNaN(productQuantity)) {
+    alert("Please add a quantity")
+    return
 }
