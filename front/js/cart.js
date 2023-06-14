@@ -73,6 +73,25 @@ function updatePrice(e) {
 }
 updatePrice()
 
+//delete attempt:
+function deleteItem(e) {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
+    if (e) {
+        const { target } = e
+        const { value } = target
+        var parent = target.closest('deleteItem')
+        const { id, color } = parent.dataset
+        const remove = parent.remove;
+        const productMatching = cart.filter((product) => product.id === id && product.color === color)
+        if (productMatching) {
+            productMatching.quantity = value
+            localStorage.setItem("cart", JSON.stringify(cart))
+        }
+    }
+}
+updatePrice()
+//end delete attempt 
+
 function refreshPage() {
     window.location.reload(false);
 }
