@@ -37,50 +37,46 @@ orderButton.addEventListener('click', function (event) {
 
 var itemQuantity = document.getElementsByClassName('itemQuantity')
 for (let i = 0; i < itemQuantity.length; i += 1) {
-    itemQuantity[i].addEventListener('change', myFunction);
-}
-var cartTotal = Array.from(document.getElementsByClassName('cart__price'))
-cartTotal.forEach(function (total) { total.addEventListener('change', myFunction) });
-
-function myFunction(e) {
-    const { target } = e
-    console.log(target.value)
-    var parent = target.closest('article.cart__item')
-    const { id, color } = parent.dataset
-    console.log(id, color);
+    itemQuantity[i].addEventListener('change', updatePrice);
 }
 
-var updateCart = Array.from(document.getElementsByTagName('totalPrice'))
-updateCart.forEach(function (total) {total.addEventListener('change', myFunction) });
-
-function myFunction(e) {
-    const { target } = e
-    var parent = target.closest('input.itemQuantity')
-    const { id, color } = parent.dataset;
-    localStorage.setItem("cart", JSON.stringify(cart))
+function calculateTotal() {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
+    let total = 0
+    cart.forEach(function (item) {
+        const { quantity, price } = item
+        const subtotal = quantity * price
+        total += subtotal
+    })
+    return total
 }
+
+function updatePrice(e) {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
+    if (e) {
+        const { target } = e
+        const { value } = target
+        var parent = target.closest('input.itemQuantity')
+        const { id, color } = parent.dataset;
+        const productMatching = cart.find((product) => product.id === id && product.color === color)
+        if (productMatching) {
+            productMatching.quantity = value
+            localStorage.setItem("cart", JSON.stringify(cart))
+        }
+    }
+    const cartTotal = calculateTotal()
+    const cartQuantity = cart.reduce(function (prev, curr) {
+        return prev + curr.quantity
+    }, 0)
+    document.getElementById('totalQuantity').innerHTML = cartQuantity
+    document.getElementById('totalPrice').innerHTML = cartTotal
+}
+updatePrice()
 
 function refreshPage() {
     window.location.reload(false);
-  }
+}
 
-<'itemQuantity' onchange={() => window.location.reload(false)}>Click to reload!</'itemQuantity'>
-
-// var updateCart = document.getElementsByClassName('itemQuantity')
-// updateCart.addEventListener('click', function (event) {
-//     const productMatching = cart.find((product) => product.id === productId && product.color === productColor)
-//     if (productMatching) {
-//         productMatching.quantity += productQuantity //not sure if this part is applicable//
-//     }
-//     else {
-//         cart.push({
-//             ...productData, //pulling down product copy & avoids extra product calls on the following page//
-//             id: productId, color: productColor, quantity: productQuantity
-//         })
-//     }
-//     localStorage.setItem("cart", JSON.stringify(cart))
-//     alert("Cart updated!")
-// })
 
 //copied from product.js, may not be fully applicable...unless change quantity to price?:
 //const productQuantity = Number(document.getElementById('quantity').value)
