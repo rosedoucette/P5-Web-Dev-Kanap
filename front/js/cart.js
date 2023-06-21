@@ -25,13 +25,34 @@ cart.forEach(product => {
     container.innerHTML += productel
 });
 
-var orderButton = document.getElementById('order')
-orderButton.addEventListener('click', function (event) {
-    const button = document.getElementById('order')
-    if ('click') {
-        alert("Your order has been submitted!")
+var orderButton = document.getElementById('orderForm')
+orderButton.addEventListener('submit', function (event) {
+    event.preventDefault()
+    const email = document.getElementById('email').value
+    const emailRejects = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+    if (!emailRejects.test(email)) {
+        alert('Invalid Email')
         return
     }
+    const firstName = document.getElementById('firstName').value
+    const lastName = document.getElementById('lastName').value
+    const address = document.getElementById('address').value
+    const city = document.getElementById('city').value
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
+    fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            contact: {
+                email, firstName, lastName, address, city
+            },
+            products: cart.map (item => item._id)
+        })
+    }).then (res => res.json ()).then(data => {
+        window.location.href='/front/html/confirmation.html?orderId='+data.orderId
+    })
 })
 
 
@@ -73,32 +94,23 @@ function updatePrice(e) {
 }
 updatePrice()
 
-//delete attempt:
+var deleteItemEl = document.getElementsByClassName('deleteItem')
+for (let i = 0; i < deleteItemEl.length; i += 1) {
+    deleteItemEl[i].addEventListener('click', deleteItem);
+}
 function deleteItem(e) {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]")
-    if (e) {
-        const { target } = e
-        const { value } = target
-        var parent = target.closest('deleteItem')
-        const { id, color } = parent.dataset
-        const remove = parent.remove;
-        const productMatching = cart.filter((product) => product.id === id && product.color === color)
-        if (productMatching) {
-            productMatching.quantity = value
-            localStorage.setItem("cart", JSON.stringify(cart))
-        }
-    }
+    const { target } = e
+    var parent = target.closest('article.cart__item')
+    const { id, color } = parent.dataset
+    parent.remove();
+    const newCart = cart.filter((product) => product.id !== id && product.color !== color)
+    localStorage.setItem("cart", JSON.stringify(newCart))
+    updatePrice()
 }
-updatePrice()
-//end delete attempt 
+
 
 function refreshPage() {
     window.location.reload(false);
 }
 
-
-//copied from product.js, may not be fully applicable...unless change quantity to price?:
-//const productQuantity = Number(document.getElementById('quantity').value)
-// if (!productQuantity || Number.isNaN(productQuantity)) {
-//     alert("Please add a quantity")
-// }
