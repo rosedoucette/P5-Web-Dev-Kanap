@@ -8,7 +8,7 @@ exports.getAllProducts = (req, res, next) => {
         product.imageUrl = req.protocol + '://' + req.get('host') + '/images/' + product.imageUrl;
         return product;
       });
-      res.status(200).json(mappedProducts);
+      res.status(200).json(mappedProducts); //always needs to send something back. it's the response to the fetch
     }
   ).catch(
     () => {
